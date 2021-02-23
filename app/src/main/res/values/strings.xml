@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Film Search</string>
+    <string name="bt_text">Нажми на кнопку, получишь результат</string>
 </resources>
