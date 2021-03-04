@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.afrosin.filmsearch.databinding.FragmentMainBinding
 import com.afrosin.filmsearch.model.Film
 import com.afrosin.filmsearch.viewmodel.AppState
+import com.afrosin.filmsearch.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class MainFragment : Fragment() {
@@ -52,7 +53,7 @@ class MainFragment : Fragment() {
             }
             is AppState.Error -> {
                 binding.loadingLayout.visibility = View.GONE
-                Snackbar.make(binding.mainView, "Error", Snackbar.LENGTH_INDEFINITE)
+                Snackbar.make(binding.mainFrameLayout, "Error", Snackbar.LENGTH_INDEFINITE)
                     .setAction("Reload") { viewModel.getFilms() }
                     .show()
             }
@@ -60,7 +61,8 @@ class MainFragment : Fragment() {
     }
 
     private fun setData(filmsData: Film) {
-        binding.filmName.text = filmsData.name
+        binding.filmItems.filmName.text = filmsData.name
+        binding.filmItems.filmDuration.text = filmsData.formatedDuration()
     }
 
     override fun onDestroyView() {

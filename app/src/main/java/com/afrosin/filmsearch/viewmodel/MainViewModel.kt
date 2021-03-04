@@ -1,9 +1,8 @@
-package com.afrosin.filmsearch.view
+package com.afrosin.filmsearch.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.afrosin.filmsearch.model.RepositoryImpl
-import com.afrosin.filmsearch.viewmodel.AppState
 import java.lang.Thread.sleep
 
 class MainViewModel(

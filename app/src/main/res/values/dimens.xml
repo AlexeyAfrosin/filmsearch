@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="marginTop">15dp</dimen>
+    <dimen name="margin_top">15dp</dimen>
+    <dimen name="margin_start">15dp</dimen>
 </resources>
