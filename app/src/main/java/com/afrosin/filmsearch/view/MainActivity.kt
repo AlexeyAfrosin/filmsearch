@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.afrosin.filmsearch.R
 import com.afrosin.filmsearch.databinding.ActivityMainBinding
+import com.afrosin.filmsearch.view.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
