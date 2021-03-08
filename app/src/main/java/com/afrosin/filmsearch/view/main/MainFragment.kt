@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.afrosin.filmsearch.R
 import com.afrosin.filmsearch.databinding.FragmentMainBinding
@@ -19,15 +18,16 @@ class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this).get(MainViewModel::class.java)
+    }
     private val adapter = MainFragmentAdapter(object : OnItemViewClickListener {
         override fun onItemViewClick(film: Film) {
-            val manager = activity?.supportFragmentManager
-            if (manager != null) {
-                val bundle = Bundle()
-                bundle.putParcelable(DetailsFragment.FILM_DATA, film)
-                manager.beginTransaction()
-                    .add(R.id.container, DetailsFragment.newInstance(bundle))
+            activity?.supportFragmentManager?.apply {
+                beginTransaction()
+                    .add(R.id.container, DetailsFragment.newInstance(Bundle().apply {
+                        putParcelable(DetailsFragment.FILM_DATA, film)
+                    }))
                     .addToBackStack("")
                     .commitAllowingStateLoss()
             }
@@ -38,7 +38,7 @@ class MainFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -47,9 +47,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.mainFragmentRecyclerView.adapter = adapter
         binding.mainFragmentFAB.setOnClickListener { changeFilmDataSet() }
-
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
+        viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
         getFilmDataSet()
     }
 
@@ -57,17 +55,16 @@ class MainFragment : Fragment() {
         when (appState) {
             is AppState.Success -> {
                 val filmsData = appState.filmsData
-                binding.mainFragmentLoadingLayout.visibility = View.GONE
+                binding.mainFragmentLoadingLayout.hide()
                 adapter.setData(filmsData)
             }
             is AppState.Loading -> {
-                binding.mainFragmentLoadingLayout.visibility = View.VISIBLE
+                binding.mainFragmentLoadingLayout.show()
             }
             is AppState.Error -> {
-                binding.mainFragmentLoadingLayout.visibility = View.GONE
-                Snackbar.make(binding.mainFragmentFAB, "Error", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Reload") { getFilmDataSet() }
-                    .show()
+                binding.mainFragmentLoadingLayout.hide()
+                binding.mainFragmentRootView.showSnackBar(getString(R.string.error_text),
+                    getString(R.string.reload_text), { getFilmDataSet() })
             }
         }
     }
@@ -80,10 +77,11 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun changeFilmDataSet() {
+    private fun changeLang() {
         isDataSetRus = !isDataSetRus
-        getFilmDataSet()
     }
+
+    private fun changeFilmDataSet() = changeLang().also { getFilmDataSet() }
 
     companion object {
         fun newInstance() = MainFragment()
@@ -97,4 +95,58 @@ class MainFragment : Fragment() {
         adapter.removeListener()
         super.onDestroy()
     }
+}
+
+private fun View.showSnackBar(
+    text: String,
+    actionText: String?,
+    action: ((View) -> Unit)?,
+    length: Int = Snackbar.LENGTH_INDEFINITE
+) {
+    Snackbar.make(this, text, length).apply {
+        if (actionText != null && action != null) {
+            setAction(actionText, action)
+        }
+    }
+        .show()
+}
+
+private fun View.showSnackBar(
+    textId: Int,
+    length: Int = Snackbar.LENGTH_INDEFINITE
+) {
+    this.showSnackBar(
+        context.resources.getString(textId),
+        null,
+        null,
+        length
+    )
+}
+
+private fun View.showSnackBar(
+    textId: Int,
+    actionTextId: Int,
+    action: (View) -> Unit,
+    length: Int = Snackbar.LENGTH_INDEFINITE
+) {
+    this.showSnackBar(
+        context.resources.getString(textId),
+        context.resources.getString(actionTextId),
+        action,
+        length
+    )
+}
+
+private fun View.show(): View {
+    if (visibility != View.VISIBLE) {
+        visibility = View.VISIBLE
+    }
+    return this
+}
+
+private fun View.hide(): View {
+    if (visibility != View.GONE) {
+        visibility = View.GONE
+    }
+    return this
 }

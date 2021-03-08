@@ -2,4 +2,6 @@
     <string name="app_name">Film Search</string>
     <string name="film_poster">Постер фильма</string>
     <string name="change_film_country">Изменить страну, выпустившую фильм</string>
+    <string name="error_text">Error</string>
+    <string name="reload_text">Reload</string>
 </resources>

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.afrosin.filmsearch.databinding.FragmentDetailsBinding
 import com.afrosin.filmsearch.model.Film
+import com.afrosin.filmsearch.model.secondsToHhMmSs
 
 class DetailsFragment : Fragment() {
 
@@ -33,17 +34,15 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val film = arguments?.getParcelable<Film>(FILM_DATA)
-
-        if (film != null) {
-            setData(film)
-        }
+        arguments?.getParcelable<Film>(FILM_DATA)?.let { film -> setData(film) }
     }
 
     private fun setData(film: Film) {
-        binding.filmItems.filmName.text = film.name
-        binding.filmItems.filmDuration.text = film.formattedDuration()
-        binding.filmItems.filmDescription.text = film.description
+        with(film) {
+            binding.filmItems.filmName.text = name
+            binding.filmItems.filmDuration.text = durationSeconds.secondsToHhMmSs()
+            binding.filmItems.filmDescription.text = description
+        }
     }
 
     override fun onDestroyView() {
