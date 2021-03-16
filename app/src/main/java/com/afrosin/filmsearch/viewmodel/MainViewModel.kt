@@ -12,12 +12,20 @@ class MainViewModel(
     ViewModel() {
 
     fun getLiveData() = liveDataToObserve
-    fun getFilms() = getDataFromLocalSource()
+    fun getFilmsRus() = getDataFromLocalSource(isRussian = true)
+    fun getFilmsWorld() = getDataFromLocalSource(isRussian = false)
 
-    private fun getDataFromLocalSource() {
+    private fun getDataFromLocalSource(isRussian: Boolean) {
         Thread {
             sleep(1000)
-            liveDataToObserve.postValue(AppState.Success(repositoryImpl.getFilmsLocalStorage()))
+            liveDataToObserve.postValue(
+                AppState.Success(
+                    if (isRussian)
+                        repositoryImpl.getFilmsLocalStorageRus()
+                    else
+                        repositoryImpl.getFilmsLocalStorageWorld()
+                )
+            )
         }.start()
     }
 }
