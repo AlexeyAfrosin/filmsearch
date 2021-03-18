@@ -4,4 +4,8 @@
     <string name="change_film_country">Изменить страну, выпустившую фильм</string>
     <string name="error_text">Error</string>
     <string name="reload_text">Reload</string>
+    <string name="system_message">СООБЩЕНИЕ ОТ СИСТЕМЫ\n</string>
+    <string name="system_action">Событие: %s</string>
+    <string name="connection_on">соединение подключено</string>
+    <string name="connection_off">соединение отключено</string>
 </resources>
