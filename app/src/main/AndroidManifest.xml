@@ -27,7 +27,6 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".view.main.FilmsIntentService" />
     </application>
 
 </manifest>

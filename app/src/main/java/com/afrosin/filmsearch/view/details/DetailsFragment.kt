@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.afrosin.filmsearch.databinding.FragmentDetailsBinding
 import com.afrosin.filmsearch.model.Film
+import com.afrosin.filmsearch.repository.POSTER_URL
+import com.bumptech.glide.Glide
 
 class DetailsFragment : Fragment() {
 
@@ -39,9 +41,17 @@ class DetailsFragment : Fragment() {
     private fun setData(film: Film) {
         with(film) {
             binding.filmItems.filmName.text = title
-//            binding.filmItems.filmDuration.text = poster_path
             binding.filmItems.filmDescription.text = overview
+
+            if (posterPath != "") {
+                Glide.with(requireContext()).load(preparePosterUrl(posterPath))
+                    .into(binding.filmItems.filmPoster)
+            }
         }
+    }
+
+    private fun preparePosterUrl(imageUrl: String?): String {
+        return "${POSTER_URL}${imageUrl}"
     }
 
     override fun onDestroyView() {

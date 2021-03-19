@@ -8,4 +8,5 @@
     <string name="system_action">Событие: %s</string>
     <string name="connection_on">соединение подключено</string>
     <string name="connection_off">соединение отключено</string>
+    <string name="error_get_films">Ошибка при получении данных. Попробуйте позже</string>
 </resources>

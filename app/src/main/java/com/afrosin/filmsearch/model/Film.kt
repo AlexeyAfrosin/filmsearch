@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Film(
     val title: String = "Фильм тест",
-    val poster_path: String? = "posterPath",
+    val posterPath: String? = "",
     val overview: String? = "Описание фильма",
 ) : Parcelable
 
