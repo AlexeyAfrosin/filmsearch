@@ -6,7 +6,11 @@ import retrofit2.Callback
 
 
 interface Repository {
-    fun getFilmsFromServer(apiKey: String, language: String, callBack: Callback<FilmsDiscoverDTO>)
+    fun getFilmsFromServer(
+        apiKey: String, language: String, callBack: Callback<FilmsDiscoverDTO>,
+        includeAdult: Boolean
+    )
+
     fun getFilmsLocalStorageWorld(): List<Film>
     fun getFilmsLocalStorageRus(): List<Film>
 }
