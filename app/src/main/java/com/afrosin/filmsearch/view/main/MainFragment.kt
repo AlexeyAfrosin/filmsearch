@@ -1,5 +1,6 @@
 package com.afrosin.filmsearch.view.main
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,12 +16,15 @@ import com.afrosin.filmsearch.model.Film
 import com.afrosin.filmsearch.utils.hide
 import com.afrosin.filmsearch.utils.show
 import com.afrosin.filmsearch.utils.showSnackBar
+import com.afrosin.filmsearch.view.USE_ADULT_CONTENT_TAG
 import com.afrosin.filmsearch.view.details.DetailsFragment
 import com.afrosin.filmsearch.viewmodel.AppState
 import com.afrosin.filmsearch.viewmodel.MainViewModel
 
+private const val IS_DATASET_RUS_TAG = "IS_DATASET_RUS"
 
 class MainFragment : Fragment() {
+
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
@@ -31,7 +35,7 @@ class MainFragment : Fragment() {
         override fun onItemViewClick(film: Film) {
             activity?.supportFragmentManager?.apply {
                 beginTransaction()
-                    .replace(R.id.container, DetailsFragment.newInstance(Bundle().apply {
+                    .add(R.id.container, DetailsFragment.newInstance(Bundle().apply {
                         putParcelable(DetailsFragment.FILM_DATA, film)
                     }))
                     .addToBackStack("")
@@ -55,7 +59,14 @@ class MainFragment : Fragment() {
         binding.mainFragmentRecyclerView.adapter = adapter
         binding.mainFragmentFAB.setOnClickListener { changeFilmDataSet() }
         viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
+        getIsDataSetParam()
         getFilmDataSet()
+    }
+
+    private fun getIsDataSetParam() {
+        isDataSetRus =
+            activity?.getPreferences(Context.MODE_PRIVATE)?.getBoolean(IS_DATASET_RUS_TAG, true)
+                ?: true
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -63,14 +74,14 @@ class MainFragment : Fragment() {
         when (appState) {
             is AppState.Success -> {
                 val filmsData = appState.filmsData
-                binding.mainFragmentLoadingLayout.hide()
+                binding.includedLoadingLayout.loadingLayout.hide()
                 adapter.setData(filmsData)
             }
             is AppState.Loading -> {
-                binding.mainFragmentLoadingLayout.show()
+                binding.includedLoadingLayout.loadingLayout.show()
             }
             is AppState.Error -> {
-                binding.mainFragmentLoadingLayout.hide()
+                binding.includedLoadingLayout.loadingLayout.hide()
                 binding.mainFragmentRootView.showSnackBar(getString(R.string.error_text),
                     getString(R.string.reload_text), { getFilmDataSet() })
             }
@@ -83,11 +94,25 @@ class MainFragment : Fragment() {
             true -> "ru-RU"
             else -> "en-EN"
         }
-        viewModel.getDataFromFromServer(BuildConfig.FILM_API_KEY, lang)
+        val includeAdult: Boolean =
+            activity?.getPreferences(Context.MODE_PRIVATE)?.getBoolean(USE_ADULT_CONTENT_TAG, true)
+                ?: true
+
+        viewModel.getDataFromFromServer(BuildConfig.FILM_API_KEY, lang, includeAdult)
     }
 
     private fun changeLang() {
         isDataSetRus = !isDataSetRus
+        saveDataSetLang()
+    }
+
+    private fun saveDataSetLang() {
+        activity?.let {
+            with(it.getPreferences(Context.MODE_PRIVATE).edit()) {
+                putBoolean(IS_DATASET_RUS_TAG, isDataSetRus)
+                apply()
+            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

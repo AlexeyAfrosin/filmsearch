@@ -13,9 +13,9 @@ class RepositoryImpl(private val remoteDataSource: RemoteDataSource = RemoteData
         apiKey: String,
         language: String,
         callBack: Callback<FilmsDiscoverDTO>,
-
-        ) {
-        remoteDataSource.getFilmsFromServer(apiKey, language, callBack)
+        includeAdult: Boolean
+    ) {
+         remoteDataSource.getFilmsFromServer(apiKey, language, callBack, includeAdult)
     }
 
     override fun getFilmsLocalStorageWorld() = getFilmsWorld()
