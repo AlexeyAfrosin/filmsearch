@@ -22,8 +22,13 @@ class RemoteDataSource {
         .build()
         .create(FilmsAPI::class.java)
 
-    fun getFilmsFromServer(apiKey: String, language: String, callBack: Callback<FilmsDiscoverDTO>) {
-        filmsApi.getDiscoverMovie(apiKey, language)
+    fun getFilmsFromServer(
+        apiKey: String,
+        language: String,
+        callBack: Callback<FilmsDiscoverDTO>,
+        includeAdult: Boolean
+    ) {
+        filmsApi.getDiscoverMovie(apiKey, language, includeAdult)
             .enqueue(callBack)
     }
 

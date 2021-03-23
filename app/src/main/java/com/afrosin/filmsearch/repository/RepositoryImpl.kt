@@ -11,10 +11,11 @@ class RepositoryImpl : Repository {
     override fun getFilmsFromServer(
         apiKey: String,
         language: String,
-        callBack: Callback<FilmsDiscoverDTO>
+        callBack: Callback<FilmsDiscoverDTO>,
+        includeAdult: Boolean
     ) {
         val remoteDataSource = RemoteDataSource()
-        remoteDataSource.getFilmsFromServer(apiKey, language, callBack)
+        remoteDataSource.getFilmsFromServer(apiKey, language, callBack, includeAdult)
     }
 
     override fun getFilmsLocalStorageWorld() = getFilmsWorld()
