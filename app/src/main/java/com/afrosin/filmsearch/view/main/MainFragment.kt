@@ -315,4 +315,3 @@ class MainFragment : Fragment() {
         super.onDestroy()
     }
 }
-

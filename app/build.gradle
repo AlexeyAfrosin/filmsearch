@@ -33,11 +33,6 @@ android {
     buildFeatures {
         viewBinding true
     }
-    buildTypes {
-        debug {
-            signingConfig signingConfigs.FilmSearch
-        }
-    }
     buildTypes.each {
         Properties properties = new Properties()
         properties.load(project.rootProject.file("api-keys.properties").newDataInputStream())
