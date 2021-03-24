@@ -17,17 +17,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Фильм 1" />
 
-    <TextView
-        android:id="@+id/film_duration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_top"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/film_name"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="00:30" />
-
     <ImageView
         android:id="@+id/film_poster"
         android:layout_width="wrap_content"
@@ -40,12 +29,13 @@
 
     <TextView
         android:id="@+id/film_description"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_start"
         android:layout_marginTop="@dimen/margin_top"
-        app:layout_constraintStart_toEndOf="@+id/film_poster"
-        app:layout_constraintTop_toBottomOf="@+id/film_name"
+        android:layout_marginEnd="@dimen/recycler_item_line_margin_end"
+        app:layout_constraintStart_toStartOf="@+id/film_poster"
+        app:layout_constraintTop_toBottomOf="@+id/film_poster"
         tools:text="Описание фильма" />
 
 

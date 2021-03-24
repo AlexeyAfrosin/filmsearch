@@ -1,14 +1,17 @@
 package com.afrosin.filmsearch.view.main
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.afrosin.filmsearch.R
 import com.afrosin.filmsearch.databinding.FragmentMainBinding
 import com.afrosin.filmsearch.model.Film
+import com.afrosin.filmsearch.model.FilmLoader
 import com.afrosin.filmsearch.view.details.DetailsFragment
 import com.afrosin.filmsearch.viewmodel.AppState
 import com.afrosin.filmsearch.viewmodel.MainViewModel
@@ -25,7 +28,7 @@ class MainFragment : Fragment() {
         override fun onItemViewClick(film: Film) {
             activity?.supportFragmentManager?.apply {
                 beginTransaction()
-                    .add(R.id.container, DetailsFragment.newInstance(Bundle().apply {
+                    .replace(R.id.container, DetailsFragment.newInstance(Bundle().apply {
                         putParcelable(DetailsFragment.FILM_DATA, film)
                     }))
                     .addToBackStack("")
@@ -33,6 +36,20 @@ class MainFragment : Fragment() {
             }
         }
     })
+
+    private val onLoadListener: FilmLoader.FilmLoaderListener =
+        object : FilmLoader.FilmLoaderListener {
+            override fun onLoaded(films: List<Film>) {
+                adapter.setData(films)
+            }
+
+            override fun onFailed(throwable: Throwable) {
+                binding.mainFragmentRootView.showSnackBar("${getString(R.string.error_text)}: ${throwable.message}",
+                    getString(R.string.reload_text), { })
+            }
+
+        }
+
     private var isDataSetRus: Boolean = true
 
     override fun onCreateView(
@@ -43,6 +60,7 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.mainFragmentRecyclerView.adapter = adapter
@@ -51,6 +69,7 @@ class MainFragment : Fragment() {
         getFilmDataSet()
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Success -> {
@@ -69,18 +88,22 @@ class MainFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun getFilmDataSet() {
-        if (isDataSetRus) {
-            viewModel.getFilmsRus()
-        } else {
-            viewModel.getFilmsWorld()
-        }
+//        if (isDataSetRus) {
+//            viewModel.getFilmsRus()
+//        } else {
+//            viewModel.getFilmsWorld()
+//        }
+        val loader = FilmLoader(onLoadListener, isDataSetRus)
+        loader.loadFilms()
     }
 
     private fun changeLang() {
         isDataSetRus = !isDataSetRus
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun changeFilmDataSet() = changeLang().also { getFilmDataSet() }
 
     companion object {

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.afrosin.filmsearch.databinding.FragmentDetailsBinding
 import com.afrosin.filmsearch.model.Film
-import com.afrosin.filmsearch.model.secondsToHhMmSs
 
 class DetailsFragment : Fragment() {
 
@@ -39,9 +38,9 @@ class DetailsFragment : Fragment() {
 
     private fun setData(film: Film) {
         with(film) {
-            binding.filmItems.filmName.text = name
-            binding.filmItems.filmDuration.text = durationSeconds.secondsToHhMmSs()
-            binding.filmItems.filmDescription.text = description
+            binding.filmItems.filmName.text = title
+//            binding.filmItems.filmDuration.text = poster_path
+            binding.filmItems.filmDescription.text = overview
         }
     }
 
