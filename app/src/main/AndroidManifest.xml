@@ -16,6 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FilmSearch">
 
+        <provider
+            android:name=".testcontentprovider.TestContentProvider"
+            android:authorities="@string/authorities"
+            android:enabled="true"
+            android:exported="true" />
+
         <receiver
             android:name=".view.MainBroadcastReceiver"
             android:enabled="false"
