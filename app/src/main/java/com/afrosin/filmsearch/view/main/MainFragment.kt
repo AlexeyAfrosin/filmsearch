@@ -1,5 +1,9 @@
 package com.afrosin.filmsearch.view.main
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,14 +12,29 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.afrosin.filmsearch.R
 import com.afrosin.filmsearch.databinding.FragmentMainBinding
 import com.afrosin.filmsearch.model.Film
-import com.afrosin.filmsearch.model.FilmLoader
 import com.afrosin.filmsearch.view.details.DetailsFragment
 import com.afrosin.filmsearch.viewmodel.AppState
 import com.afrosin.filmsearch.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
+
+const val FILMS_INTENT_FILTER = "FILMS INTENT FILTER"
+const val FILMS_RESPONSE_EMPTY_EXTRA = "FILMS RESPONSE EMPTY EXTRA"
+const val FILMS_LOAD_RESULT_DATA = "FILMS LOAD RESULT DATA"
+const val FILMS_RESPONSE_SUCCESS_EXTRA = "FILMS RESPONSE SUCCESS EXTRA"
+const val FILMS_RESPONSE_ERROR_EXTRA = "FILMS RESPONSE ERROR EXTRA"
+const val FILMS_JSON_EXTRA = "FILMS JSON EXTRA"
+const val FILMS_REQUEST_ERROR_MESSAGE_EXTRA = "FILMS REQUEST ERROR MESSAGE EXTRA"
+const val FILMS_URL_MALFORMED_EXTRA = "FILMS URL MALFORMED EXTRA"
+
+private const val PROCESS_ERROR = "Обработка ошибки"
+
 
 class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
@@ -37,20 +56,36 @@ class MainFragment : Fragment() {
         }
     })
 
-    private val onLoadListener: FilmLoader.FilmLoaderListener =
-        object : FilmLoader.FilmLoaderListener {
-            override fun onLoaded(films: List<Film>) {
-                adapter.setData(films)
-            }
+    private val loadResultReceiver: BroadcastReceiver = object : BroadcastReceiver() {
 
-            override fun onFailed(throwable: Throwable) {
-                binding.mainFragmentRootView.showSnackBar("${getString(R.string.error_text)}: ${throwable.message}",
-                    getString(R.string.reload_text), { })
+        @RequiresApi(Build.VERSION_CODES.N)
+        override fun onReceive(context: Context, intent: Intent) {
+            when (intent.getStringExtra(FILMS_LOAD_RESULT_DATA)) {
+                FILMS_RESPONSE_SUCCESS_EXTRA -> {
+                    val filmsJSON = intent.getStringExtra(FILMS_JSON_EXTRA)
+                    val filmsType = object : TypeToken<List<Film>>() {}.type
+                    val filmsStr = Gson().fromJson(filmsJSON, JsonObject::class.java)
+                    val films: List<Film> = Gson().fromJson(filmsStr.get("results"), filmsType)
+                    renderData(AppState.Success(films))
+                }
+                else -> binding.mainFragmentRootView.showSnackBar(getString(R.string.error_text),
+                    getString(R.string.reload_text), { getFilmDataSet() })
             }
-
         }
+    }
 
     private var isDataSetRus: Boolean = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        context?.let {
+            LocalBroadcastManager.getInstance(it).registerReceiver(
+                loadResultReceiver, IntentFilter(
+                    FILMS_INTENT_FILTER
+                )
+            )
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,13 +125,11 @@ class MainFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun getFilmDataSet() {
-//        if (isDataSetRus) {
-//            viewModel.getFilmsRus()
-//        } else {
-//            viewModel.getFilmsWorld()
-//        }
-        val loader = FilmLoader(onLoadListener, isDataSetRus)
-        loader.loadFilms()
+        context?.let {
+            it.startService(Intent(it, FilmsIntentService::class.java).apply {
+                putExtra(IS_RUSSIAN_LANG_EXTRA, isDataSetRus)
+            })
+        }
     }
 
     private fun changeLang() {
@@ -116,6 +149,9 @@ class MainFragment : Fragment() {
 
     override fun onDestroy() {
         adapter.removeListener()
+        context?.let {
+            LocalBroadcastManager.getInstance(it).unregisterReceiver(loadResultReceiver)
+        }
         super.onDestroy()
     }
 }
