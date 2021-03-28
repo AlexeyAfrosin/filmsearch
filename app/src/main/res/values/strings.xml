@@ -15,4 +15,11 @@
     <string name="film_note_saved">Заметка сохранена</string>
     <string name="film_settings">Настройки отображения</string>
     <string name="adult_content_text">Контент для взрослых</string>
+    <string name="show_contacts">Перейти в контакты</string>
+
+    <string name="contact_access_tittle">Доступ к контактам</string>
+    <string name="contact_access_message">Доступ к контактам необходим для совершения вызова</string>
+    <string name="contact_access_positive_btn_text">Предоставить доступ</string>
+    <string name="contact_access_negative_btn_text">Не предоставлять</string>
+    <string name="contact_access_negative_btn_close_text">Закрыть</string>
 </resources>

@@ -55,6 +55,15 @@ class MainActivity : AppCompatActivity() {
                 }
                 true
             }
+            R.id.menu_show_contacts -> {
+                supportFragmentManager.apply {
+                    beginTransaction()
+                        .replace(R.id.container, ContactsFragment.newInstance())
+                        .addToBackStack("")
+                        .commitAllowingStateLoss()
+                }
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
 
