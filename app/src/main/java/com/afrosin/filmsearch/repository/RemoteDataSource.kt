@@ -41,7 +41,7 @@ class RemoteDataSource {
         return httpClient.build()
     }
 
-    inner class FilmsApiInterceptor : Interceptor {
+    class FilmsApiInterceptor : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             return chain.proceed(chain.request())
         }

@@ -6,7 +6,8 @@ import com.afrosin.filmsearch.model.getFilmsWorld
 import retrofit2.Callback
 
 
-class RepositoryImpl : Repository {
+class RepositoryImpl(private val remoteDataSource: RemoteDataSource = RemoteDataSource()) :
+    Repository {
 
     override fun getFilmsFromServer(
         apiKey: String,
@@ -14,7 +15,6 @@ class RepositoryImpl : Repository {
         callBack: Callback<FilmsDiscoverDTO>,
         includeAdult: Boolean
     ) {
-        val remoteDataSource = RemoteDataSource()
         remoteDataSource.getFilmsFromServer(apiKey, language, callBack, includeAdult)
     }
 
