@@ -4,9 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.afrosin.filmsearch.R
 import com.afrosin.filmsearch.databinding.FragmentDetailsBinding
 import com.afrosin.filmsearch.model.Film
+import com.afrosin.filmsearch.model.FilmHistory
+import com.afrosin.filmsearch.repository.POSTER_URL
+import com.afrosin.filmsearch.viewmodel.DetailsViewModel
+import com.bumptech.glide.Glide
+import java.util.*
 
 class DetailsFragment : Fragment() {
 
@@ -22,13 +30,23 @@ class DetailsFragment : Fragment() {
         }
     }
 
+    private val viewModel: DetailsViewModel by lazy {
+        ViewModelProvider(this).get(DetailsViewModel::class.java)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
-
+        viewModel.detailsLiveData.observe(viewLifecycleOwner, { loadFilmNote(it) })
         return binding.root
+    }
+
+    private fun loadFilmNote(filmHistory: FilmHistory) {
+        if (filmHistory != null) {
+//           bunding.filmNote = filmHistory.note
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,9 +57,35 @@ class DetailsFragment : Fragment() {
     private fun setData(film: Film) {
         with(film) {
             binding.filmItems.filmName.text = title
-//            binding.filmItems.filmDuration.text = poster_path
             binding.filmItems.filmDescription.text = overview
+            binding.filmItems.saveNote.setOnClickListener {
+                saveFilmNote(
+                    id,
+                    String.format("Заметка: %s", binding.filmItems.filmNote.text.toString()),
+                    title,
+                    true
+                )
+            }
+
+            if (posterPath != "") {
+                Glide.with(requireContext()).load(preparePosterUrl(posterPath))
+                    .into(binding.filmItems.filmPoster)
+            }
+            saveFilmNote(id, "Просмотр информации о фильме", title, false)
         }
+    }
+
+    private fun saveFilmNote(filmId: Long, note: String?, title: String, showToast: Boolean) {
+        if (note != null) {
+            viewModel.saveFilmHistoryToDB(FilmHistory(0, filmId, note, Date(), title))
+            if (showToast) {
+                Toast.makeText(context, R.string.film_note_saved, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun preparePosterUrl(imageUrl: String?): String {
+        return "${POSTER_URL}${imageUrl}"
     }
 
     override fun onDestroyView() {
