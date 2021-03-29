@@ -18,13 +18,12 @@ class MainBroadcastReceiver : BroadcastReceiver() {
                 else -> context.getString(R.string.connection_off)
             }
 
-            StringBuilder().apply {
-                append(context.getString(R.string.system_message))
-                append(context.getString(R.string.system_action, str))
-                toString().also {
+            StringBuilder()
+                .append(context.getString(R.string.system_message))
+                .append(context.getString(R.string.system_action, str))
+                .toString().also {
                     Toast.makeText(context, it, Toast.LENGTH_LONG).show()
                 }
-            }
         }
 
 
