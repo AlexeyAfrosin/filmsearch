@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.afrosin.filmsearch.R
 import com.afrosin.filmsearch.databinding.ActivityMainBinding
 import com.afrosin.filmsearch.view.filmHistory.FragmentFilmHistory
+import com.afrosin.filmsearch.view.googlemaps.MapsFragment
 import com.afrosin.filmsearch.view.main.MainFragment
+import com.afrosin.filmsearch.view.popularPerson.PopularPersonFragment
 
 const val ACTION_CONNECTIVITY_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE"
 
@@ -59,6 +61,24 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager.apply {
                     beginTransaction()
                         .replace(R.id.container, ContactsFragment.newInstance())
+                        .addToBackStack("")
+                        .commitAllowingStateLoss()
+                }
+                true
+            }
+            R.id.menu_show_google_maps -> {
+                supportFragmentManager.apply {
+                    beginTransaction()
+                        .replace(R.id.container, MapsFragment.newInstance())
+                        .addToBackStack("")
+                        .commitAllowingStateLoss()
+                }
+                true
+            }
+            R.id.menu_show_popular_person -> {
+                supportFragmentManager.apply {
+                    beginTransaction()
+                        .replace(R.id.container, PopularPersonFragment.newInstance())
                         .addToBackStack("")
                         .commitAllowingStateLoss()
                 }
