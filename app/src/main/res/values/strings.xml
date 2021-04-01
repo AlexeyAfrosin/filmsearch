@@ -45,5 +45,6 @@
     <string name="marker_start">Старт</string>
 
     <string name="show_popular_person">Список популярных актеров</string>
+    <string name="person_profile">Профайл актера</string>
 
 </resources>

@@ -44,7 +44,7 @@ class PopularPersonFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentPopularPersonBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -61,7 +61,7 @@ class PopularPersonFragment : Fragment() {
             is AppState.SuccessPopularPerson -> {
                 val personData = appState.popularPersonData
                 binding.includedLoadingLayout.loadingLayout.hide()
-                adapter.setData(personData)
+                adapter.setData(personData, requireContext())
             }
             is AppState.Loading -> {
                 binding.includedLoadingLayout.loadingLayout.show()

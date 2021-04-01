@@ -6,23 +6,36 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ImageView
+        android:id="@+id/personProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/person_profile_height"
+        android:layout_marginTop="@dimen/margin_top"
+        android:layout_marginEnd="@dimen/margin_end"
+        android:contentDescription="@string/person_profile"
+        android:scaleType="fitXY"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@drawable/ic_baseline_bathtub_24" />
+
     <TextView
         android:id="@+id/personNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/recycler_item_padding"
         android:textSize="@dimen/recycler_item_text_size"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/personProfile"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Джонни Депп" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/recycler_item_line_height"
+        android:layout_marginTop="@dimen/margin_top_1dp"
         android:layout_marginEnd="@dimen/recycler_item_line_margin_end"
         android:background="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/personNameTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/personProfile" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
