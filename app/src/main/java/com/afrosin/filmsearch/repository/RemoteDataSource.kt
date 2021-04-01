@@ -1,6 +1,8 @@
 package com.afrosin.filmsearch.repository
 
 import com.afrosin.filmsearch.model.FilmsDiscoverDTO
+import com.afrosin.filmsearch.model.FilmsPersonPopularDTO
+import com.afrosin.filmsearch.model.PersonDetailsDTO
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -22,8 +24,32 @@ class RemoteDataSource {
         .build()
         .create(FilmsAPI::class.java)
 
-    fun getFilmsFromServer(apiKey: String, language: String, callBack: Callback<FilmsDiscoverDTO>) {
-        filmsApi.getDiscoverMovie(apiKey, language)
+    fun getFilmsFromServer(
+        apiKey: String,
+        language: String,
+        callBack: Callback<FilmsDiscoverDTO>,
+        includeAdult: Boolean
+    ) {
+        filmsApi.getDiscoverMovie(apiKey, language, includeAdult)
+            .enqueue(callBack)
+    }
+
+    fun getPopularPersonsFromServer(
+        apiKey: String,
+        language: String,
+        callBack: Callback<FilmsPersonPopularDTO>
+    ) {
+        filmsApi.getPersonPopular(apiKey, language)
+            .enqueue(callBack)
+    }
+
+    fun getPersonDetailsFromServer(
+        person_id: Long,
+        apiKey: String,
+        language: String,
+        callBack: Callback<PersonDetailsDTO>
+    ) {
+        filmsApi.getPersonDetails(person_id, apiKey, language)
             .enqueue(callBack)
     }
 
