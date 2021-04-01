@@ -1,9 +1,6 @@
 package com.afrosin.filmsearch.utils
 
-import com.afrosin.filmsearch.model.Film
-import com.afrosin.filmsearch.model.FilmDTO
-import com.afrosin.filmsearch.model.FilmHistory
-import com.afrosin.filmsearch.model.FilmsDiscoverDTO
+import com.afrosin.filmsearch.model.*
 import com.afrosin.filmsearch.room.FilmViewHistoryEntity
 import java.util.*
 import kotlin.collections.ArrayList
@@ -31,4 +28,17 @@ fun convertFilmHistoryToFilmHistoryEntity(filmHistory: FilmHistory): FilmViewHis
         filmHistory.dateCreated.time,
         filmHistory.filmTitle
     )
+}
+
+fun converFilmsPersonPopularDtoToFilmsPersonPopularList(filmsPersonPopularDTO: FilmsPersonPopularDTO): List<Person> {
+    val personDTO: List<PersonDTO> = filmsPersonPopularDTO.results!!
+    val persons = ArrayList<Person>()
+    personDTO.forEach {
+        persons.add(Person(it.profile_path, it.name, it.id))
+    }
+    return persons
+}
+
+fun converPersonDetailsDtoToPersonDetails(personDetailsDTO: PersonDetailsDTO): PersonDetails {
+    return PersonDetails(personDetailsDTO.id, personDetailsDTO.place_of_birth)
 }
