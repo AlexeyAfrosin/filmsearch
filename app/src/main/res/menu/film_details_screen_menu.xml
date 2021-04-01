@@ -19,4 +19,16 @@
         android:title="@string/show_contacts"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/menu_show_google_maps"
+        android:icon="@android:drawable/ic_dialog_map"
+        android:title="@string/show_google_maps"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_show_popular_person"
+        android:icon="@drawable/ic_people_alt"
+        android:title="@string/show_popular_person"
+        app:showAsAction="ifRoom" />
+
 </menu>
