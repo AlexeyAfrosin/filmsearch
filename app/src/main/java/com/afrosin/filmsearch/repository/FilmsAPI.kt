@@ -9,6 +9,7 @@ interface FilmsAPI {
     @GET("3/discover/movie")
     fun getDiscoverMovie(
         @Query("api_key") api_key: String,
-        @Query("language") language: String
+        @Query("language") language: String,
+        @Query("include_adult") includeAdult: Boolean
     ): Call<FilmsDiscoverDTO>
 }
