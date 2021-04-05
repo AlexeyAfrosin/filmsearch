@@ -6,10 +6,22 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+def keystorePropertiesFile = rootProject.file("signing-keys.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
 
+    signingConfigs {
+        release {
+            storeFile file("filmSearchRelease.jks")
+            storePassword keystoreProperties['releaseStorePassword']
+            keyAlias 'filmSearchRelease'
+            keyPassword keystoreProperties['releaseKeyPassword']
+        }
+    }
     defaultConfig {
         applicationId "com.afrosin.filmsearch"
         minSdkVersion 23
@@ -34,6 +46,25 @@ android {
     buildFeatures {
         viewBinding true
     }
+    buildTypes {
+        debug {
+            versionNameSuffix '-debug'
+            buildConfigField "String", "TYPE", '"DEBUG"'
+        }
+
+        staging {
+            initWith debug
+            versionNameSuffix '-staging'
+            buildConfigField "String", "TYPE", '"STAGING"'
+        }
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "TYPE", '"RELEASE"'
+            signingConfig signingConfigs.release
+        }
+    }
     buildTypes.each {
         Properties properties = new Properties()
         properties.load(project.rootProject.file("api-keys.properties").newDataInputStream())
@@ -49,6 +80,17 @@ android {
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+    flavorDimensions 'version'
+    productFlavors {
+        free {
+            dimension 'version'
+            versionNameSuffix '.free'
+        }
+        paid {
+            dimension 'version'
+            versionNameSuffix '.paid'
+        }
     }
 }
 

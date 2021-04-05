@@ -10,4 +10,9 @@ sealed class AppState {
     data class SuccessPersonDetails(val personDetails: PersonDetails) : AppState()
     data class Error(val error: Throwable) : AppState()
     object Loading : AppState()
+
+    companion object {
+        const val SERVER_ERROR = "Ошибка сервера"
+        const val CORRUPTED_DATA = "Неполные данные"
+    }
 }
