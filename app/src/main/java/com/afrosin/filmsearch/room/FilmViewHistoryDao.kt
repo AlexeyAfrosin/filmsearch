@@ -1,5 +1,6 @@
 package com.afrosin.filmsearch.room
 
+import android.database.Cursor
 import androidx.room.*
 
 @Dao
@@ -18,4 +19,13 @@ interface FilmViewHistoryDao {
 
     @Delete
     fun delete(filmViewHistoryEntity: FilmViewHistoryEntity)
+
+    @Query("delete from FilmViewHistoryEntity where filmId = :filmId")
+    fun deleteByFilmId(filmId: Long)
+
+    @Query("select id, filmId, note, dateCreated, filmTitle from FilmViewHistoryEntity")
+    fun getFilmViewHistoryCursor(): Cursor
+
+    @Query("select id, filmId, note, dateCreated, filmTitle from FilmViewHistoryEntity where filmId = :filmId")
+    fun getFilmViewHistoryCursor(filmId: Long): Cursor
 }

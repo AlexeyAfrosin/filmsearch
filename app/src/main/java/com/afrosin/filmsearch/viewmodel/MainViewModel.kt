@@ -10,9 +10,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.lang.Thread.sleep
 
-private const val SERVER_ERROR = "Ошибка сервера"
-private const val CORRUPTED_DATA = "Неполные данные"
-
 class MainViewModel(
     private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData(),
     private val repositoryImpl: RepositoryImpl = RepositoryImpl()
@@ -53,7 +50,7 @@ class MainViewModel(
                 if (response.isSuccessful && serverResponse != null) {
                     onResponse(serverResponse)
                 } else {
-                    onErrorRequest(SERVER_ERROR)
+                    onErrorRequest(AppState.SERVER_ERROR)
                 }
             )
         }
@@ -75,7 +72,7 @@ class MainViewModel(
         }
 
         private fun onEmptyResponse(): AppState {
-            return onErrorRequest(CORRUPTED_DATA)
+            return onErrorRequest(AppState.CORRUPTED_DATA)
         }
 
         private fun onErrorRequest(errorName: String): AppState {
