@@ -123,73 +123,8 @@ class MainFragment : Fragment() {
         binding.mainFragmentRecyclerView.adapter = adapter
         binding.mainFragmentFAB.setOnClickListener { changeFilmDataSet() }
         viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
-        binding.mainFragmentFABLocation.setOnClickListener {
-            checkPermission()
-        }
         getIsDataSetParam()
         getFilmDataSet()
-    }
-
-    private fun checkPermission() {
-        activity?.let {
-            when {
-                ContextCompat.checkSelfPermission(
-                    it,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED -> {
-                    getLocation()
-                }
-                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                    showRationaleDialog()
-                }
-                else -> {
-                    requestPermissions()
-                }
-            }
-        }
-    }
-
-    private fun requestPermissions() {
-        requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_REQUEST_CODE)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        checkPermissionsResult(requestCode, grantResults)
-    }
-
-    private fun checkPermissionsResult(requestCode: Int, grantResults: IntArray) {
-        when (requestCode) {
-            LOCATION_REQUEST_CODE -> {
-                var grantedPermissions = 0
-                if (grantResults.isNotEmpty()) {
-                    for (i in grantResults) {
-                        if (i == PackageManager.PERMISSION_GRANTED) {
-                            grantedPermissions++
-                        }
-                    }
-
-
-                    if (grantResults.size == grantedPermissions) {
-                        getLocation()
-                    } else {
-                        showDialog(
-                            getString(R.string.dialog_title_no_gps),
-                            getString((R.string.dialog_message_no_gps))
-                        )
-                    }
-                } else {
-                    showDialog(
-                        getString(R.string.dialog_title_no_gps),
-                        getString((R.string.dialog_message_no_gps))
-                    )
-                }
-                return
-            }
-        }
     }
 
     private fun showDialog(title: String, message: String) {
@@ -202,48 +137,6 @@ class MainFragment : Fragment() {
                 }
                 .create()
                 .show()
-        }
-    }
-
-    private fun showRationaleDialog() {
-        activity?.let {
-            AlertDialog.Builder(it)
-                .setTitle(getString(R.string.dialog_rationale_title))
-                .setMessage(getString(R.string.dialog_rationale_message))
-                .setPositiveButton(getString(R.string.dialog_rationale_give_access)) { _, _ ->
-                    requestPermissions()
-                }
-                .setNegativeButton(getString(R.string.dialog_rationale_decline)) { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .create()
-                .show()
-
-        }
-    }
-
-
-    private fun getLocation() {
-        activity?.let { context ->
-            if (ContextCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
-                val locationManager =
-                    context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    val provider = locationManager.getProvider(LocationManager.GPS_PROVIDER)
-                    provider?.let {
-                        locationManager.requestLocationUpdates(
-                            LocationManager.GPS_PROVIDER,
-                            REFRESH_PERIOD,
-                            MINIMAL_DISTANCE,
-                            onLocationListener
-                        )
-                    }
-                }
-            }
         }
     }
 
