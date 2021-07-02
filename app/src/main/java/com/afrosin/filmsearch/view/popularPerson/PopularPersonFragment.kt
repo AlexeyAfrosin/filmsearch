@@ -13,7 +13,6 @@ import com.afrosin.filmsearch.model.Person
 import com.afrosin.filmsearch.utils.hide
 import com.afrosin.filmsearch.utils.show
 import com.afrosin.filmsearch.utils.showSnackBar
-import com.afrosin.filmsearch.view.googlemaps.MapsFragment
 import com.afrosin.filmsearch.viewmodel.AppState
 import com.afrosin.filmsearch.viewmodel.PopularPersonViewModel
 
@@ -30,14 +29,7 @@ class PopularPersonFragment : Fragment() {
         PopularPersonFragmentAdapter(object : OnItemViewClickListener {
             override fun onItemViewClick(person: Person) {
 
-                activity?.supportFragmentManager?.apply {
-                    beginTransaction()
-                        .replace(R.id.container, MapsFragment.newInstance(Bundle().apply {
-                            putParcelable(MapsFragment.PERSON_DATA, person)
-                        }))
-                        .addToBackStack("")
-                        .commitAllowingStateLoss()
-                }
+
             }
         })
 
