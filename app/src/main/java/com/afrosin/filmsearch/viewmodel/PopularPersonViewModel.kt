@@ -3,7 +3,6 @@ package com.afrosin.filmsearch.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.afrosin.filmsearch.model.FilmsPersonPopularDTO
-import com.afrosin.filmsearch.repository.RepositoryImpl
 import com.afrosin.filmsearch.utils.converFilmsPersonPopularDtoToFilmsPersonPopularList
 import retrofit2.Call
 import retrofit2.Callback
@@ -11,7 +10,7 @@ import retrofit2.Response
 
 class PopularPersonViewModel(
     private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData(),
-    private val repositoryImpl: RepositoryImpl = RepositoryImpl()
+//    private val repositoryImpl: RepositoryImpl = RepositoryImpl()
 ) :
     ViewModel() {
 
@@ -19,7 +18,7 @@ class PopularPersonViewModel(
 
     fun getDataFromFromServer(apiKey: String, language: String) {
         liveDataToObserve.value = AppState.Loading
-        repositoryImpl.getPopularPersonFromServer(apiKey, language, callBack)
+//        repositoryImpl.getPopularPersonFromServer(apiKey, language, callBack)
     }
 
     private val callBack = object : Callback<FilmsPersonPopularDTO> {

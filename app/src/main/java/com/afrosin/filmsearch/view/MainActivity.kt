@@ -1,40 +1,53 @@
 package com.afrosin.filmsearch.view
 
-import android.content.IntentFilter
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import com.afrosin.filmsearch.R
-import com.afrosin.filmsearch.databinding.ActivityMainBinding
+import com.afrosin.filmsearch.presenter.abstr.AbstractActivity
 import com.afrosin.filmsearch.view.filmHistory.FragmentFilmHistory
-import com.afrosin.filmsearch.view.main.MainFragment
 import com.afrosin.filmsearch.view.popularPerson.PopularPersonFragment
+import com.github.terrakok.cicerone.NavigatorHolder
+import com.github.terrakok.cicerone.Router
+import com.github.terrakok.cicerone.androidx.AppNavigator
+import javax.inject.Inject
 
 const val ACTION_CONNECTIVITY_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE"
 
-class MainActivity : AppCompatActivity() {
-    private val receiver = MainBroadcastReceiver()
+class MainActivity : AbstractActivity(R.layout.activity_main) {
+
+
+    private val navigator = AppNavigator(this, R.id.container)
+
+    @Inject
+    lateinit var router: Router
+
+    @Inject
+    lateinit var navigatorHolder: NavigatorHolder
+
+    @Inject
+    lateinit var filmScreens: FilmScreens
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
-        val view = activityMainBinding.root
-        setContentView(view)
-
-        registerReceiver(receiver, IntentFilter(ACTION_CONNECTIVITY_CHANGE))
-
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MainFragment.newInstance())
-                .commitNow()
-        }
+        router.replaceScreen(filmScreens.films())
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.film_details_screen_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
+
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        navigatorHolder.setNavigator(navigator)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        navigatorHolder.removeNavigator()
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

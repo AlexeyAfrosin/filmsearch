@@ -1,5 +1,6 @@
 package com.afrosin.filmsearch.view.details
 
+//import com.afrosin.filmsearch.repository.POSTER_URL
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +12,7 @@ import com.afrosin.filmsearch.R
 import com.afrosin.filmsearch.databinding.FragmentDetailsBinding
 import com.afrosin.filmsearch.model.Film
 import com.afrosin.filmsearch.model.FilmHistory
-import com.afrosin.filmsearch.repository.POSTER_URL
 import com.afrosin.filmsearch.viewmodel.DetailsViewModel
-import com.bumptech.glide.Glide
 import java.util.*
 
 class DetailsFragment : Fragment() {
@@ -23,9 +22,9 @@ class DetailsFragment : Fragment() {
 
     companion object {
         const val FILM_DATA = "film_data"
-        fun newInstance(bundle: Bundle): DetailsFragment {
+        fun newInstance(film: Film): DetailsFragment {
             val fragment = DetailsFragment()
-            fragment.arguments = bundle
+//            fragment.arguments = bundle
             return fragment
         }
     }
@@ -51,7 +50,7 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getParcelable<Film>(FILM_DATA)?.let { film -> setData(film) }
+//        arguments?.getParcelable<Film>(FILM_DATA)?.let { film -> setData(film) }
     }
 
     private fun setData(film: Film) {
@@ -67,10 +66,10 @@ class DetailsFragment : Fragment() {
                 )
             }
 
-            if (posterPath != "") {
-                Glide.with(requireContext()).load(preparePosterUrl(posterPath))
-                    .into(binding.filmItems.filmPoster)
-            }
+//            if (posterPath != "") {
+//                Glide.with(requireContext()).load(preparePosterUrl(posterPath))
+//                    .into(binding.filmItems.filmPoster)
+//            }
             saveFilmNote(id, "Просмотр информации о фильме", title, false)
         }
     }
@@ -85,7 +84,8 @@ class DetailsFragment : Fragment() {
     }
 
     private fun preparePosterUrl(imageUrl: String?): String {
-        return "${POSTER_URL}${imageUrl}"
+//        return "${POSTER_URL}${imageUrl}"
+        return "${imageUrl}"
     }
 
     override fun onDestroyView() {

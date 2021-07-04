@@ -5,14 +5,14 @@ import com.afrosin.filmsearch.room.FilmViewHistoryEntity
 import java.util.*
 import kotlin.collections.ArrayList
 
-fun convertFilmsDiscoverDtoToFilmList(filmsDiscoverDTO: FilmsDiscoverDTO): List<Film> {
-    val filmsDTO: List<FilmDTO> = filmsDiscoverDTO.results!!
-    val films = ArrayList<Film>()
-    filmsDTO.forEach {
-        films.add(Film(it.title, it.poster_path, it.overview, it.id))
-    }
-    return films
-}
+//fun convertFilmsDiscoverDtoToFilmList(discoverFilm: DiscoverFilm): List<Film> {
+//    val filmsDTO: List<Film> = discoverFilm.results!!
+//    val films = ArrayList<Film>()
+//    filmsDTO.forEach {
+//        films.add(Film(it.title, it.poster_path, it.overview, it.id))
+//    }
+//    return films
+//}
 
 fun convertFilmHistoryEntityToFilmHistory(filmHistoryEntity: List<FilmViewHistoryEntity>): List<FilmHistory> {
     return filmHistoryEntity.map {

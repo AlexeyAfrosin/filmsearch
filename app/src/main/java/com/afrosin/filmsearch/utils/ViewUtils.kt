@@ -55,3 +55,5 @@ fun View.hide(): View {
     }
     return this
 }
+
+fun View.click(click: () -> Unit) = setOnClickListener { click() }
