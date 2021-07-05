@@ -10,15 +10,20 @@ class FilmRepositoryImp(
     private val cacheUserDataSource: CacheFilmDataSource
 ) : FilmRepository {
 
-    override fun fetchFilms(): Observable<List<Film>> = cloudFilmDataSource
-        .fetchFilms()
-        .flatMap(::fetchFromCloudIfRequired)
+    override fun fetchFilms(lang: String, includeAdult: Boolean): Observable<List<Film>> =
+        cloudFilmDataSource
+            .fetchFilms(lang, includeAdult)
+            .flatMap { fetchFromCloudIfRequired(it, lang, includeAdult) }
 
-    private fun fetchFromCloudIfRequired(films: List<Film>): Observable<List<Film>> =
+    private fun fetchFromCloudIfRequired(
+        films: List<Film>,
+        lang: String,
+        includeAdult: Boolean
+    ): Observable<List<Film>> =
         if (films.isEmpty()) {
             cloudFilmDataSource
-                .fetchFilms()
-                .flatMapSingle(cacheUserDataSource::retain)
+                .fetchFilms(lang, includeAdult)
+                .flatMapSingle { cacheUserDataSource.retain(it, lang, includeAdult) }
         } else {
             Observable.just(films)
         }

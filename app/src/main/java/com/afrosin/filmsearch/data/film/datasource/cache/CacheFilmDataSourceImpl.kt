@@ -10,11 +10,16 @@ class CacheFilmDataSourceImpl(filmStorage: FilmStorage) : CacheFilmDataSource {
 
     private val filmDao: FilmDao = filmStorage.filmDao()
 
-    override fun retain(films: List<Film>): Single<List<Film>> =
+    override fun retain(
+        films: List<Film>,
+        lang: String,
+        includeAdult: Boolean
+    ): Single<List<Film>> =
         filmDao
             .updateFilms(films)
-            .andThen(fetchFilms())
+            .andThen(fetchFilms(lang, includeAdult))
             .firstOrError()
 
-    override fun fetchFilms(): Observable<List<Film>> = filmDao.fetchFilms()
+    override fun fetchFilms(lang: String, includeAdult: Boolean): Observable<List<Film>> =
+        filmDao.fetchFilms()
 }

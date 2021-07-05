@@ -34,21 +34,21 @@ class FilmsPresenter(
         super.onDestroy()
     }
 
-    private fun loadData() {
+    fun loadData(lang: String? = "ru-RU", includeAdult: Boolean? = false) {
         disposables +=
             networkStateRepository
                 .watchForNetworkState()
                 .filter { networkState -> networkState == NetworkState.CONNECTED }
                 .observeOn(schedulers.main())
-                .doOnNext { displayFilms() }
+                .doOnNext { displayFilms(lang, includeAdult) }
                 .subscribeOn(schedulers.backgroundNewThread())
                 .subscribe()
-        displayFilms()
+        displayFilms(lang, includeAdult)
     }
 
-    private fun displayFilms() {
+    private fun displayFilms(lang: String? = "ru-RU", includeAdult: Boolean? = false) {
         disposables += filmRepository
-            .fetchFilms()
+            .fetchFilms(lang!!, includeAdult!!)
             .map { it.map(FilmMapper::map) }
             .observeOn(schedulers.main())
             .subscribeOn(schedulers.backgroundNewThread())

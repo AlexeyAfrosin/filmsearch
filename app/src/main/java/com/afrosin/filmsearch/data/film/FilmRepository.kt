@@ -7,5 +7,5 @@ interface FilmRepository {
     /**
      * Возвращает список фильмов
      */
-    fun fetchFilms(): Observable<List<Film>>
+    fun fetchFilms(lang: String, includeAdult: Boolean): Observable<List<Film>>
 }

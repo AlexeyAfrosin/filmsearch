@@ -8,9 +8,9 @@ import java.util.concurrent.TimeUnit
 
 class CloudFilmDataSource(private val filmApi: FilmApi) : FilmDataSource {
 
-    override fun fetchFilms(): Observable<List<Film>> =
+    override fun fetchFilms(lang: String, includeAdult: Boolean): Observable<List<Film>> =
         filmApi
-            .getDiscoverMovie()
+            .getDiscoverMovie(language = lang, includeAdult = includeAdult)
             .flatMap(CloudFilmMapper::map)
             .delay(1L, TimeUnit.SECONDS)
             .toObservable()

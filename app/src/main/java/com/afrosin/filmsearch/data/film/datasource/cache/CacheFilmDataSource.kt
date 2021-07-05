@@ -5,5 +5,5 @@ import com.afrosin.filmsearch.model.Film
 import io.reactivex.rxjava3.core.Single
 
 interface CacheFilmDataSource : FilmDataSource {
-    fun retain(films: List<Film>): Single<List<Film>>
+    fun retain(films: List<Film>, lang: String, includeAdult: Boolean): Single<List<Film>>
 }
