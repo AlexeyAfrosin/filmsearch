@@ -1,7 +1,7 @@
 package com.afrosin.filmsearch.data.api
 
 import com.afrosin.filmsearch.BuildConfig
-import com.afrosin.filmsearch.model.FilmsDiscoverDTO
+import com.afrosin.filmsearch.model.DiscoverFilmDTO
 import com.afrosin.filmsearch.model.FilmsPersonPopularDTO
 import com.afrosin.filmsearch.model.PersonDetailsDTO
 import io.reactivex.rxjava3.core.Single
@@ -15,7 +15,7 @@ interface FilmApi {
         @Query("api_key") api_key: String? = BuildConfig.FILM_API_KEY,
         @Query("language") language: String? = "ru-RU",
         @Query("include_adult") includeAdult: Boolean? = false
-    ): Single<FilmsDiscoverDTO>
+    ): Single<DiscoverFilmDTO>
 
     @GET("3/person/popular")
     fun getPersonPopular(

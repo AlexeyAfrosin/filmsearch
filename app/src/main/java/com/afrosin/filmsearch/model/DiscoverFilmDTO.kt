@@ -1,6 +1,6 @@
 package com.afrosin.filmsearch.model
 
-data class FilmsDiscoverDTO(
+data class DiscoverFilmDTO(
     val page: Int,
     val results: List<Film>,
     val total_pages: Int,
