@@ -1,6 +1,9 @@
 package com.afrosin.filmsearch.utils
 
 import android.view.View
+import android.widget.ImageView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.model.GlideUrl
 import com.google.android.material.snackbar.Snackbar
 
 fun View.showSnackBar(
@@ -57,3 +60,15 @@ fun View.hide(): View {
 }
 
 fun View.click(click: () -> Unit) = setOnClickListener { click() }
+
+@Suppress("IMPLICIT_CAST_TO_ANY")
+fun ImageView.setImageFromUrl(url: String?, placeholder: Int = 0) {
+
+    if (url != "") {
+        val glideUrl = if (url!!.isEmpty()) placeholder else GlideUrl(url)
+        Glide.with((context))
+            .load(glideUrl)
+            .placeholder(placeholder)
+            .into(this)
+    }
+}

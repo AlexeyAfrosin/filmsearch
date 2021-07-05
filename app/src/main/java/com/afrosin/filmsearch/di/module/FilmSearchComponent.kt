@@ -4,6 +4,7 @@ import android.content.Context
 import com.afrosin.filmsearch.app.App
 import com.afrosin.filmsearch.di.module.film.FilmModule
 import com.afrosin.filmsearch.di.module.network.NetworkStateModule
+import com.afrosin.filmsearch.di.module.popularPerson.PopularPersonModule
 import com.afrosin.filmsearch.di.module.settings.SettingsModule
 import com.afrosin.filmsearch.scheduler.Schedulers
 import com.afrosin.filmsearch.view.FilmScreens
@@ -21,7 +22,8 @@ import javax.inject.Singleton
         MainModule::class,
         NetworkStateModule::class,
         FilmModule::class,
-        SettingsModule::class
+        SettingsModule::class,
+        PopularPersonModule::class
     ]
 )
 interface FilmSearchComponent : AndroidInjector<App> {

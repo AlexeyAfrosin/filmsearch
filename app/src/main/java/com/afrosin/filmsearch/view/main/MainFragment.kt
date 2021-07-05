@@ -81,6 +81,8 @@ class MainFragment : AbstractFragment(R.layout.fragment_main), FilmsView,
         fun newInstance() = MainFragment()
     }
 
+    // TODO вынести работу с Preferences в зависимость
+
     private var isDataSetRus: Boolean = true
 
     private fun getIsDataSetParam() {

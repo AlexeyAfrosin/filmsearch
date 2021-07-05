@@ -19,9 +19,9 @@ interface FilmApi {
 
     @GET("3/person/popular")
     fun getPersonPopular(
-        @Query("api_key") api_key: String,
-        @Query("language") language: String
-    ): Single<List<FilmsPersonPopularDTO>>
+        @Query("api_key") api_key: String? = BuildConfig.FILM_API_KEY,
+        @Query("language") language: String? = "ru-RU",
+    ): Single<FilmsPersonPopularDTO>
 
     @GET("3/person/{id}")
     fun getPersonDetails(
