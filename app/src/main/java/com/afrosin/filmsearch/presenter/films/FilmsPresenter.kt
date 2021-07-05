@@ -1,6 +1,7 @@
 package com.afrosin.filmsearch.presenter.films
 
 import com.afrosin.filmsearch.data.film.FilmRepository
+import com.afrosin.filmsearch.model.Film
 import com.afrosin.filmsearch.network.NetworkState
 import com.afrosin.filmsearch.network.NetworkStateRepository
 import com.afrosin.filmsearch.scheduler.Schedulers
@@ -56,9 +57,8 @@ class FilmsPresenter(
             )
     }
 
-    fun backPressed(): Boolean {
-        router.exit()
-        return true
+    fun showFilmDetails(film: Film) {
+        router.navigateTo(screens.filmDetails(film))
     }
 
 }

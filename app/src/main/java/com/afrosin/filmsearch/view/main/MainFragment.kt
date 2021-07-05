@@ -65,7 +65,7 @@ class MainFragment : AbstractFragment(R.layout.fragment_main), FilmsView,
     }
 
     override fun onFilmClicked(film: Film) {
-        router.navigateTo(FilmScreens().filmDetails(film))
+        presenter.showFilmDetails(film)
     }
 
 

@@ -15,7 +15,7 @@ interface FilmDao {
     fun updateFilm(film: Film): Completable
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun updateFilms(users: List<Film>): Completable
+    fun updateFilms(films: List<Film>): Completable
 
     @Query("Select * from films order by title")
     fun fetchFilms(): Observable<List<Film>>

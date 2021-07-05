@@ -11,6 +11,7 @@ class CloudFilmDataSource(private val filmApi: FilmApi) : FilmDataSource {
     override fun fetchFilms(): Observable<List<Film>> =
         filmApi
             .getDiscoverMovie()
+            .flatMap(CloudFilmMapper::map)
             .delay(1L, TimeUnit.SECONDS)
             .toObservable()
 }
