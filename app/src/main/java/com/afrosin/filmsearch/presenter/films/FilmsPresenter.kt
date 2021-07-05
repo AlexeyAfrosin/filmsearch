@@ -61,4 +61,10 @@ class FilmsPresenter(
         router.navigateTo(screens.filmDetails(film))
     }
 
+
+    fun showFilmSettings(): Boolean {
+        router.navigateTo(screens.filmSettings())
+        return true
+    }
+
 }

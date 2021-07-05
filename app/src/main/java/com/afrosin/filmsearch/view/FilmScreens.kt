@@ -3,14 +3,20 @@ package com.afrosin.filmsearch.view
 import com.afrosin.filmsearch.model.Film
 import com.afrosin.filmsearch.view.details.DetailsFragment
 import com.afrosin.filmsearch.view.main.MainFragment
+import com.afrosin.filmsearch.view.setting.SettingsFragment
+import com.github.terrakok.cicerone.Screen
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 
 class FilmScreens : IScreens {
-    override fun films() = FragmentScreen {
+    override fun films(): Screen = FragmentScreen {
         MainFragment.newInstance()
     }
 
-    override fun filmDetails(film: Film) = FragmentScreen {
+    override fun filmSettings(): Screen = FragmentScreen {
+        SettingsFragment.newInstance()
+    }
+
+    override fun filmDetails(film: Film): Screen = FragmentScreen {
         DetailsFragment.newInstance(film)
     }
 

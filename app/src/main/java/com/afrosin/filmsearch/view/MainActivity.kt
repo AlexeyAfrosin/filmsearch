@@ -12,8 +12,6 @@ import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import javax.inject.Inject
 
-const val ACTION_CONNECTIVITY_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE"
-
 class MainActivity : AbstractActivity(R.layout.activity_main) {
 
 
@@ -61,12 +59,7 @@ class MainActivity : AbstractActivity(R.layout.activity_main) {
                 true
             }
             R.id.film_settings -> {
-                supportFragmentManager.apply {
-                    beginTransaction()
-                        .replace(R.id.container, SettingsFragment.newInstance())
-                        .addToBackStack("")
-                        .commitAllowingStateLoss()
-                }
+                router.navigateTo(filmScreens.filmSettings())
                 true
             }
             R.id.menu_show_popular_person -> {

@@ -6,5 +6,6 @@ import com.github.terrakok.cicerone.Screen
 interface IScreens {
     fun films(): Screen
     fun filmDetails(film: Film): Screen
+    fun filmSettings(): Screen
 
 }
