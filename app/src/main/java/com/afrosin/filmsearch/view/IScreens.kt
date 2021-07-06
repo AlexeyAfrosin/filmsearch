@@ -9,6 +9,4 @@ interface IScreens {
     fun filmDetails(film: Film): Screen
     fun filmSettings(): Screen
     fun persons(): Screen
-    fun personDetails(person: Person): Screen
-
 }

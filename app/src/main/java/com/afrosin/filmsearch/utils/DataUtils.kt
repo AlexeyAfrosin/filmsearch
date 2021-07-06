@@ -1,8 +1,6 @@
 package com.afrosin.filmsearch.utils
 
 import com.afrosin.filmsearch.model.FilmHistory
-import com.afrosin.filmsearch.model.PersonDetails
-import com.afrosin.filmsearch.model.PersonDetailsDTO
 import com.afrosin.filmsearch.room.FilmViewHistoryEntity
 import java.util.*
 
@@ -20,8 +18,4 @@ fun convertFilmHistoryToFilmHistoryEntity(filmHistory: FilmHistory): FilmViewHis
         filmHistory.dateCreated.time,
         filmHistory.filmTitle
     )
-}
-
-fun converPersonDetailsDtoToPersonDetails(personDetailsDTO: PersonDetailsDTO): PersonDetails {
-    return PersonDetails(personDetailsDTO.id, personDetailsDTO.place_of_birth)
 }

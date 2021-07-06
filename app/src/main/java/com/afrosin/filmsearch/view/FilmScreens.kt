@@ -1,7 +1,6 @@
 package com.afrosin.filmsearch.view
 
 import com.afrosin.filmsearch.model.Film
-import com.afrosin.filmsearch.model.Person
 import com.afrosin.filmsearch.view.details.DetailsFragment
 import com.afrosin.filmsearch.view.main.MainFragment
 import com.afrosin.filmsearch.view.popularPerson.PopularPersonFragment
@@ -24,10 +23,6 @@ class FilmScreens : IScreens {
 
     override fun persons(): Screen = FragmentScreen {
         PopularPersonFragment.newInstance()
-    }
-
-    override fun personDetails(person: Person): Screen = FragmentScreen {
-        MainFragment.newInstance()
     }
 
 }
