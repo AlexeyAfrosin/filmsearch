@@ -3,6 +3,7 @@ package com.afrosin.filmsearch.di.module
 import android.content.Context
 import com.afrosin.filmsearch.app.App
 import com.afrosin.filmsearch.di.module.film.FilmModule
+import com.afrosin.filmsearch.di.module.filmDetails.FilmDetailsModule
 import com.afrosin.filmsearch.di.module.network.NetworkStateModule
 import com.afrosin.filmsearch.di.module.popularPerson.PopularPersonModule
 import com.afrosin.filmsearch.di.module.settings.SettingsModule
@@ -23,7 +24,8 @@ import javax.inject.Singleton
         NetworkStateModule::class,
         FilmModule::class,
         SettingsModule::class,
-        PopularPersonModule::class
+        PopularPersonModule::class,
+        FilmDetailsModule::class
     ]
 )
 interface FilmSearchComponent : AndroidInjector<App> {

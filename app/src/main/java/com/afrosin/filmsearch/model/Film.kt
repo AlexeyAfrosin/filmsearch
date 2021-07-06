@@ -10,6 +10,6 @@ data class Film(
     @SerializedName("id") val id: Long,
     @SerializedName("adult") val adult: Boolean,
     @SerializedName("overview") val overview: String,
-    @SerializedName("poster_path") val poster_path: String,
+    @SerializedName("poster_path") val posterPath: String,
     @SerializedName("title") val title: String
 )
