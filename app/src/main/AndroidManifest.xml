@@ -15,11 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FilmSearch">
 
-        <receiver
-            android:name=".view.MainBroadcastReceiver"
-            android:enabled="false"
-            android:exported="false" />
-
         <activity android:name=".view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,11 +1,13 @@
 package com.afrosin.filmsearch.model
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
-@Parcelize
+@Entity(tableName = "persons")
 data class Person(
-    val profilePath: String,
-    val name: String,
-    val id: Long
-) : Parcelable
+    @PrimaryKey
+    @SerializedName("id") val id: Long,
+    @SerializedName("profile_path") val profilePath: String?,
+    @SerializedName("name") val name: String
+)
