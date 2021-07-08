@@ -23,16 +23,13 @@ class DetailsFragment(film: Film) : AbstractFragment(R.layout.fragment_details),
         )
     }
 
-    // TODO подумать куда деть ссылку
-    private val posterUrl = "https://image.tmdb.org/t/p/w300"
-
     override fun init(film: Film) {
         with(film) {
             with(binding) {
                 filmItems.filmName.text = title
                 filmItems.filmDescription.text = overview
                 if (film.posterPath != "" && film.posterPath != null) {
-                    filmItems.filmPoster.setImageFromUrl("$posterUrl${film.posterPath}")
+                    filmItems.filmPoster.setImageFromUrl(film.fullPosterPath())
                 }
             }
         }
