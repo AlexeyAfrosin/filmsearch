@@ -1,7 +1,6 @@
 package com.afrosin.filmsearch.presenter.persons
 
 import com.afrosin.filmsearch.data.film.FilmRepository
-import com.afrosin.filmsearch.model.Person
 import com.afrosin.filmsearch.network.NetworkState
 import com.afrosin.filmsearch.network.NetworkStateRepository
 import com.afrosin.filmsearch.scheduler.Schedulers
@@ -57,9 +56,9 @@ class PersonsPresenter(
             )
     }
 
-    fun showPersonDetails(person: Person) {
-        router.navigateTo(screens.personDetails(person))
-    }
+//    fun showPersonDetails(person: Person) {
+//        router.navigateTo(screens.personDetails(person))
+//    }
 
 
 }
