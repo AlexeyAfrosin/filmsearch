@@ -1,32 +1,20 @@
-package com.afrosin.filmsearch.view
+package com.afrosin.filmsearch.view.setting
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import by.kirich1409.viewbindingdelegate.viewBinding
+import com.afrosin.filmsearch.R
 import com.afrosin.filmsearch.databinding.FragmentSettingsBinding
+import com.afrosin.filmsearch.presenter.SettingsPresenter
+import com.afrosin.filmsearch.presenter.abstr.AbstractFragment
+import moxy.ktx.moxyPresenter
 
 const val USE_ADULT_CONTENT_TAG = "USE_ADULT_CONTENT_TAG"
 
-class SettingsFragment : Fragment() {
+class SettingsFragment : AbstractFragment(R.layout.fragment_settings), SettingsView {
 
-    private var _binding: FragmentSettingsBinding? = null
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+    private val binding: FragmentSettingsBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,7 +23,7 @@ class SettingsFragment : Fragment() {
             activity?.getPreferences(Context.MODE_PRIVATE)?.getBoolean(USE_ADULT_CONTENT_TAG, true)
                 ?: true
 
-        binding.scUseAdultContent.setOnCheckedChangeListener { compoundButton, isChecked ->
+        binding.scUseAdultContent.setOnCheckedChangeListener { _, isChecked ->
             activity?.let {
                 with(it.getPreferences(Context.MODE_PRIVATE).edit()) {
                     putBoolean(USE_ADULT_CONTENT_TAG, isChecked)
@@ -44,6 +32,10 @@ class SettingsFragment : Fragment() {
             }
         }
 
+    }
+
+    private val presenter: SettingsPresenter by moxyPresenter {
+        SettingsPresenter()
     }
 
     companion object {

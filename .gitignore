@@ -9,3 +9,7 @@
 .cxx
 local.properties
 api-keys.properties
+signing-keys.properties
+/app/filmSearch.jks
+/app/filmSearchRelease.jks
+/app/free/release/
