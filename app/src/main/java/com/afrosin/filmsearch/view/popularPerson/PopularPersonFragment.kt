@@ -1,98 +1,70 @@
 package com.afrosin.filmsearch.view.popularPerson
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.afrosin.filmsearch.BuildConfig
+import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.afrosin.filmsearch.R
+import com.afrosin.filmsearch.data.film.FilmRepository
 import com.afrosin.filmsearch.databinding.FragmentPopularPersonBinding
 import com.afrosin.filmsearch.model.Person
-import com.afrosin.filmsearch.utils.hide
-import com.afrosin.filmsearch.utils.show
-import com.afrosin.filmsearch.utils.showSnackBar
-import com.afrosin.filmsearch.view.googlemaps.MapsFragment
-import com.afrosin.filmsearch.viewmodel.AppState
-import com.afrosin.filmsearch.viewmodel.PopularPersonViewModel
+import com.afrosin.filmsearch.network.NetworkStateRepository
+import com.afrosin.filmsearch.presenter.abstr.AbstractFragment
+import com.afrosin.filmsearch.presenter.persons.PersonsPresenter
+import com.afrosin.filmsearch.scheduler.Schedulers
+import com.afrosin.filmsearch.view.FilmScreens
+import com.afrosin.filmsearch.view.popularPerson.adapter.PopularPersonFragmentAdapter
+import com.github.terrakok.cicerone.Router
+import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-class PopularPersonFragment : Fragment() {
+class PopularPersonFragment : AbstractFragment(R.layout.fragment_popular_person),
+    PopularPersonView {
 
-    private var _binding: FragmentPopularPersonBinding? = null
-    private val binding get() = _binding!!
+    private val binding: FragmentPopularPersonBinding by viewBinding()
+    private var adapter = PopularPersonFragmentAdapter()
 
-    private val viewModel: PopularPersonViewModel by lazy {
-        ViewModelProvider(this).get(PopularPersonViewModel::class.java)
-    }
+    override fun init() {
+        adapter = PopularPersonFragmentAdapter()
 
-    private val adapter =
-        PopularPersonFragmentAdapter(object : OnItemViewClickListener {
-            override fun onItemViewClick(person: Person) {
-
-                activity?.supportFragmentManager?.apply {
-                    beginTransaction()
-                        .replace(R.id.container, MapsFragment.newInstance(Bundle().apply {
-                            putParcelable(MapsFragment.PERSON_DATA, person)
-                        }))
-                        .addToBackStack("")
-                        .commitAllowingStateLoss()
-                }
-            }
-        })
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentPopularPersonBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.popularPersonRecyclerView.adapter = adapter
-        viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
-        getPopularPeopleDataSet()
-    }
-
-    private fun renderData(appState: AppState) {
-        when (appState) {
-            is AppState.SuccessPopularPerson -> {
-                val personData = appState.popularPersonData
-                binding.includedLoadingLayout.loadingLayout.hide()
-                adapter.setData(personData, requireContext())
-            }
-            is AppState.Loading -> {
-                binding.includedLoadingLayout.loadingLayout.show()
-            }
-            is AppState.Error -> {
-                binding.includedLoadingLayout.loadingLayout.hide()
-                binding.popularPersonFragmentRootView.showSnackBar(getString(R.string.error_text),
-                    getString(R.string.reload_text), { getPopularPeopleDataSet() })
-            }
+        with(binding) {
+            popularPersonRecyclerView.layoutManager = LinearLayoutManager(context)
+            popularPersonRecyclerView.adapter = adapter
         }
     }
 
-    override fun onDestroy() {
-        adapter.removeListener()
-        super.onDestroy()
+    override fun updateList() {
+        adapter?.notifyDataSetChanged()
     }
 
-    private fun getPopularPeopleDataSet(langDataSet: String = "ru-Ru") {
-        viewModel.getDataFromFromServer(BuildConfig.FILM_API_KEY, langDataSet)
+    override fun updateInsertedItem(position: Int) {
+        adapter?.notifyItemInserted(position)
+    }
+
+    override fun showPersons(persons: List<Person>) = adapter.submitList(persons)
+
+    @Inject
+    lateinit var filmRepository: FilmRepository
+
+    @Inject
+    lateinit var schedulers: Schedulers
+
+    @Inject
+    lateinit var networkStateRepository: NetworkStateRepository
+
+    @Inject
+    lateinit var router: Router
+
+    private val presenter: PersonsPresenter by moxyPresenter {
+        PersonsPresenter(
+            filmRepository,
+            router,
+            FilmScreens(),
+            schedulers,
+            networkStateRepository
+        )
     }
 
     companion object {
         fun newInstance() = PopularPersonFragment()
     }
 
-    interface OnItemViewClickListener {
-        fun onItemViewClick(person: Person)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }

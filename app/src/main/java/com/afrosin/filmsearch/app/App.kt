@@ -1,44 +1,33 @@
 package com.afrosin.filmsearch.app
 
-import android.app.Application
-import androidx.room.Room
-import com.afrosin.filmsearch.R
-import com.afrosin.filmsearch.room.FilmHistoryDataBase
-import com.afrosin.filmsearch.room.FilmViewHistoryDao
+import android.util.Log
+import com.afrosin.filmsearch.di.module.DaggerFilmSearchComponent
+import com.afrosin.filmsearch.scheduler.SchedulerFactory
+import com.afrosin.filmsearch.view.FilmScreens
+import com.github.terrakok.cicerone.Cicerone
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
+import io.reactivex.rxjava3.plugins.RxJavaPlugins
 
-class App : Application() {
+class App : DaggerApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        appInstance = this
-    }
-
-    companion object {
-        private var appInstance: App? = null
-        private var db: FilmHistoryDataBase? = null
-        private const val DB_NAME = "FilmHistory.db"
-
-        fun getFilmViewHistoryDao(): FilmViewHistoryDao {
-            if (db == null) {
-                synchronized(FilmHistoryDataBase::class.java) {
-                    if (db == null) {
-                        if (appInstance == null) throw IllegalStateException(
-                            appInstance!!.applicationContext.getString(
-                                R.string.error_creating_database
-                            )
-                        )
-
-                        db = Room.databaseBuilder(
-                            appInstance!!.applicationContext,
-                            FilmHistoryDataBase::class.java,
-                            DB_NAME
-                        )
-                            .allowMainThreadQueries()
-                            .build()
-                    }
-                }
-            }
-            return db!!.filmViewHistoryDao()
+        RxJavaPlugins.setErrorHandler { error ->
+            Log.e("GLOBAL_ERRORS", error.message.toString())
         }
     }
+
+    override fun applicationInjector(): AndroidInjector<App> =
+        DaggerFilmSearchComponent
+            .builder()
+            .withContext(applicationContext)
+            .apply {
+                val cicerone = Cicerone.create()
+                withRouter(cicerone.router)
+                withNavigatorHolder(cicerone.getNavigatorHolder())
+            }
+            .withSchedulers(SchedulerFactory.create())
+            .withScreens(FilmScreens())
+            .build()
 }
