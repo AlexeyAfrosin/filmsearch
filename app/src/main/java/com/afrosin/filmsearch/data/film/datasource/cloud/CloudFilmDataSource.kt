@@ -12,14 +12,14 @@ class CloudFilmDataSource(private val filmApi: FilmApi) : FilmDataSource {
     override fun fetchFilms(lang: String, includeAdult: Boolean): Observable<List<Film>> =
         filmApi
             .getDiscoverMovie(language = lang, includeAdult = includeAdult)
-            .flatMap(CloudFilmMapper::map)
+            .map { it.results }
             .delay(1L, TimeUnit.SECONDS)
             .toObservable()
 
     override fun fetchPopularPersons(): Observable<List<Person>> =
         filmApi
             .getPersonPopular()
-            .flatMap(CloudPersonMapper::map)
+            .map { it.results }
             .delay(1L, TimeUnit.SECONDS)
             .toObservable()
 }
