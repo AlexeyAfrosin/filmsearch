@@ -1,23 +1,19 @@
 package com.afrosin.filmsearch.model
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.afrosin.filmsearch.di.module.network.IMAGE_URL
+import com.google.gson.annotations.SerializedName
 
-@Parcelize
+@Entity(tableName = "films")
 data class Film(
-    val title: String = "Фильм тест",
-    val posterPath: String? = "",
-    val overview: String? = "Описание фильма",
-    val id: Long,
-    val note: String? = null
-) : Parcelable
+    @PrimaryKey
+    @SerializedName("id") val id: Long,
+    @SerializedName("adult") val adult: Boolean,
+    @SerializedName("overview") val overview: String,
+    @SerializedName("poster_path") val posterPath: String,
+    @SerializedName("title") val title: String
+) {
+    fun fullPosterPath(): String = "${IMAGE_URL}${posterPath}"
+}
 
-fun getFilmsWorld() = listOf(
-    Film("Фильм Eng 1", "posterPath", "Описание фильма Eng 1", 1),
-    Film("Фильм US 2", "posterPath", "Описание фильма US 2", 2)
-)
-
-fun getFilmsRus() = listOf(
-    Film("Фильм Ru 1", "posterPath", "Описание фильма Ru 1", 3),
-    Film("Фильм Ru 2", "posterPath", "Описание фильма Ru 2", 4)
-)
